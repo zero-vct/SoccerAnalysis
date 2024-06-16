@@ -176,7 +176,7 @@ class SoccerAnalysisApp:
             self.display_plot()
             
     def about_us(self):
-        messagebox.showinfo("About","Author: ZhangLiang \n Version: 1.0 \n Copyright © 2024")
+        messagebox.showinfo("About","Author: Zhang \n Version: 1.0 \n Copyright © 2024")
 
 class SoccerAnalysis:
     def __init__(self, data):
