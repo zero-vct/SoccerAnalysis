@@ -1,7 +1,5 @@
-import tkinter as tk
-from tkinter import filedialog, messagebox, simpledialog
-import pandas as pd
 import matplotlib.pyplot as plt
+<<<<<<< Updated upstream
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
     
@@ -177,6 +175,8 @@ class SoccerAnalysisApp:
             
     def about_us(self):
         messagebox.showinfo("About","Author: Zhang \n Version: 1.0 \n Copyright © 2024")
+=======
+>>>>>>> Stashed changes
 
 class SoccerAnalysis:
     def __init__(self, data):
@@ -344,9 +344,3 @@ class SoccerAnalysis:
         
         cb = plt.colorbar(ax.collections[0], ax=ax)
         cb.set_label('Count')
-        
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = SoccerAnalysisApp(root)
-    root.mainloop()
