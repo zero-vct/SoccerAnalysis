@@ -28,7 +28,7 @@
    pip install matplotlib pandas
    ```
 3. 下载或克隆本应用程序的代码库，或者也可以直接下载dist文件夹下的打包好的SoccerAnalysis.exe程序直接运行。
-4. 运行 `SoccerAnalysis.py`。
+4. 运行 `SoccerAnalysisApp.py`。
 
 ## 使用说明
 
@@ -38,19 +38,6 @@
 4. 使用“保存图片文件”按钮保存当前显示的图表。
 5. 使用显示球员轨迹线管功能按钮时，建议输入两个不同的球员编号。
 6. 使用显示球员体力相关功能按钮时，建议输入相同的球员编号。
-
-## 截图
-
-![应用程序截图](./image/Kick Line.png "Kick Line")
-
-![应用程序截图](./image/Ball Trace.png "Ball Trace")
-
-![应用程序截图](./image/Heat Map.png "Heat Map")
-
-![应用程序截图](./image/Player Trace.png "Player Trace")
-
-![应用程序截图](./image/Stamina Pie.png "Stamina pie")
-
 
 ## 许可
 
