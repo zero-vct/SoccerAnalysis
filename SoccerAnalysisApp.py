@@ -25,22 +25,21 @@ class SoccerAnalysisApp:
         self.file_button = tk.Button(self.button_frame, text="选择 CSV 文件", command=self.load_file, width=button_width)
         self.file_button.grid(row=0, column=0, padx=5)
         
-        # 创建图片保存按钮
-        self.picture_save_button = tk.Button(self.button_frame, text="保存图片文件", command=self.save_picture,state=tk.DISABLED, width=button_width)
-        self.picture_save_button.grid(row=0, column=1, padx=5)
-        
         # 创建各个功能按钮
         self.ball_trace_button = tk.Button(self.button_frame, text="显示球的轨迹", command=self.show_ball_trace, state=tk.DISABLED, width=button_width)
-        self.ball_trace_button.grid(row=0, column=2, padx=5)
+        self.ball_trace_button.grid(row=0, column=1, padx=5)
         
         self.kick_line_button = tk.Button(self.button_frame, text="显示传球轨迹", command=self.show_kick_line, state=tk.DISABLED, width=button_width)
-        self.kick_line_button.grid(row=0, column=3, padx=5)
+        self.kick_line_button.grid(row=0, column=2, padx=5)
         
         self.our_player_trace_button = tk.Button(self.button_frame, text="显示左边球员轨迹", command=self.show_our_player_trace, state=tk.DISABLED, width=button_width)
-        self.our_player_trace_button.grid(row=0, column=4, padx=5)
+        self.our_player_trace_button.grid(row=0, column=3, padx=5)
         
         self.their_player_trace_button = tk.Button(self.button_frame, text="显示右边球员轨迹", command=self.show_their_player_trace, state=tk.DISABLED, width=button_width)
-        self.their_player_trace_button.grid(row=0, column=5, padx=5)
+        self.their_player_trace_button.grid(row=0, column=4, padx=5)
+        
+        self.both_player_trace_button = tk.Button(self.button_frame, text="显示双方球员轨迹", command=self.show_both_player_trace, state=tk.DISABLED, width=button_width)
+        self.both_player_trace_button.grid(row=0, column=5, padx=5)
         
         self.stamina_gap_button = tk.Button(self.button_frame, text="显示双方球员体力变化", command=self.show_stamina_gap, state=tk.DISABLED, width=button_width)
         self.stamina_gap_button.grid(row=1, column=0, padx=5)
@@ -57,8 +56,12 @@ class SoccerAnalysisApp:
         self.ball_heatmap_button = tk.Button(self.button_frame, text="显示球的热力图", command=self.show_ball_heatmap, state=tk.DISABLED, width=button_width)
         self.ball_heatmap_button.grid(row=1, column=4, padx=5)
         
-        self.about_us_button = tk.Button(self.button_frame, text="关于", command=self.about_us,  width=button_width)
-        self.about_us_button.grid(row=1, column=5, padx=5)
+        # 创建图片保存按钮
+        self.picture_save_button = tk.Button(self.button_frame, text="保存图片文件", command=self.save_picture,state=tk.DISABLED, width=button_width)
+        self.picture_save_button.grid(row=1, column=5, padx=5)
+        
+        # self.about_us_button = tk.Button(self.button_frame, text="关于", command=self.about_us,  width=button_width)
+        # self.about_us_button.grid(row=1, column=5, padx=5)
         
         # 创建一个画布用于显示图表
         self.canvas_frame = tk.Frame(root,width=1200,height=800)
@@ -72,13 +75,20 @@ class SoccerAnalysisApp:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         
     def load_file(self):
+        # 清空画布内容
+        for widget in self.canvas_frame.winfo_children():
+            widget.pack_forget()
         self.filepath = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
         if self.filepath:
             self.data = pd.read_csv(self.filepath)
             self.visualizer = SoccerAnalysis(self.data)
-            messagebox.showinfo("文件已加载", f"已选择文件: {self.filepath}")
+            messagebox.showinfo("文件加载成功", f"已选择文件: {self.filepath}")
             self.enable_buttons()
-        self.status_bar.config(text=f"当前文件：{self.filepath}")
+            self.status_bar.config(text=f"当前文件：{self.filepath}")
+        else:
+            messagebox.showwarning("文件加载失败", "未选择文件")
+            self.status_bar.config(text=f"当前文件：未打开")
+        
     
     def enable_buttons(self):
         self.picture_save_button.config(state=tk.NORMAL)
@@ -86,6 +96,7 @@ class SoccerAnalysisApp:
         self.kick_line_button.config(state=tk.NORMAL)
         self.our_player_trace_button.config(state=tk.NORMAL)
         self.their_player_trace_button.config(state=tk.NORMAL)
+        self.both_player_trace_button.config(state=tk.NORMAL)
         self.stamina_gap_button.config(state=tk.NORMAL)
         self.stamina_pie_button.config(state=tk.NORMAL)
         self.left_player_heatmap_button.config(state=tk.NORMAL)
@@ -116,7 +127,9 @@ class SoccerAnalysisApp:
 
         if file_path:
             fig.savefig(file_path)
-            print(f"图片已保存至 {file_path}")
+            messagebox.showinfo("保存成功",f"图片已保存至 {file_path}")
+        else:
+            messagebox.showwarning("保存失败", "未选择保存路径")
     
     def show_ball_trace(self):
         plt.close("all") 
@@ -131,14 +144,16 @@ class SoccerAnalysisApp:
     def show_left_player_heatmap(self):
         plt.close("all")
         unum = simpledialog.askinteger("输入", "请输入左方球员编号 (1-11):", minvalue=1, maxvalue=11)
-        self.visualizer.ShowLeftHeatMap(unum)
-        self.display_plot()
+        if unum is not None:
+            self.visualizer.ShowLeftHeatMap(unum)
+            self.display_plot()
         
     def show_right_player_heatmap(self):
         plt.close("all")
         unum = simpledialog.askinteger("输入", "请输入右方球员编号 (1-11):", minvalue=1, maxvalue=11)
-        self.visualizer.ShowRightHeatMap(unum)
-        self.display_plot()
+        if unum is not None:
+            self.visualizer.ShowRightHeatMap(unum)
+            self.display_plot()
         
     def show_ball_heatmap(self):
         plt.close("all") 
@@ -149,7 +164,9 @@ class SoccerAnalysisApp:
         plt.close("all")
         unum1 = simpledialog.askinteger("输入", "请输入第一个左方球员编号 (1-11):", minvalue=1, maxvalue=11)
         unum2 = simpledialog.askinteger("输入", "请输入第二个左方球员编号 (1-11):", minvalue=1, maxvalue=11)
-        if unum1 is not None:
+        if unum1 or unum2 is None:
+            messagebox.showwarning("输入错误", "未输入足够的球员编号")
+        else:
             self.visualizer.ShowOurPlayerTrace(unum1, unum2)
             self.display_plot()
     
@@ -157,15 +174,29 @@ class SoccerAnalysisApp:
         plt.close("all")
         unum1 = simpledialog.askinteger("输入", "请输入第一个右方球员编号 (1-11):", minvalue=1, maxvalue=11)
         unum2 = simpledialog.askinteger("输入", "请输入第二个右方球员编号 (1-11):", minvalue=1, maxvalue=11)
-        if unum1 is not None:
+        if unum1 or unum2 is None:
+            messagebox.showwarning("输入错误", "未输入足够的球员编号")
+        else:
             self.visualizer.ShowTheirPlayerTrace(unum1, unum2)
+            self.display_plot()
+    
+    def show_both_player_trace(self):
+        plt.close("all")
+        unum1 = simpledialog.askinteger("输入", "请输入左方球员编号 (1-11):", minvalue=1, maxvalue=11)
+        unum2 = simpledialog.askinteger("输入", "请输入右方球员编号 (1-11):", minvalue=1, maxvalue=11)
+        if unum1 or unum2 is None:
+            messagebox.showwarning("输入错误", "未输入足够的球员编号")
+        else:
+            self.visualizer.ShowBothPlayerTrace(unum1, unum2)
             self.display_plot()
     
     def show_stamina_gap(self):
         plt.close("all")
         unum1 = simpledialog.askinteger("输入", "请输入左方球员编号 (1-11):", minvalue=1, maxvalue=11)
         unum2 = simpledialog.askinteger("输入", "请输入右方球员编号 (1-11):", minvalue=1, maxvalue=11)
-        if unum1 is not None and unum2 is not None:
+        if unum1 or unum2 is None:
+            messagebox.showwarning("输入错误", "未输入足够的球员编号")
+        else:
             self.visualizer.ShowStaminaGap(unum1, unum2)
             self.display_plot()
     
@@ -173,12 +204,14 @@ class SoccerAnalysisApp:
         plt.close("all")
         unum1 = simpledialog.askinteger("输入", "请输入左方球员编号 (1-11):", minvalue=1, maxvalue=11)
         unum2 = simpledialog.askinteger("输入", "请输入右方球员编号 (1-11):", minvalue=1, maxvalue=11)
-        if unum1 is not None:
+        if unum1 or unum2 is None:
+            messagebox.showwarning("输入错误", "未输入足够的球员编号")
+        else:
             self.visualizer.ShowStaminaPie(unum1, unum2)
             self.display_plot()
             
     def about_us(self):
-        messagebox.showinfo("About","Author: ZhangLiang \n Version: 1.0 \n Copyright © 2024")
+        messagebox.showinfo("About","Author: Zhang \n Version: 1.0 \n Copyright © 2024")
     
 if __name__ == '__main__':
     root = tk.Tk()

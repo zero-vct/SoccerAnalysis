@@ -88,6 +88,17 @@ class SoccerAnalysis:
             ax.plot(player2_x, player2_y, color='b', linewidth=0.5, label='{}_{}'.format(self.right_team, str(unum2)))
         plt.title('{} Player {} And {} Trace'.format(self.right_team,str(unum1), str(unum2)))
         ax.legend(loc='upper left')
+        
+    def ShowBothPlayerTrace(self, unum1=0, unum2=0):
+        ax = self.init()
+        player1_x = self.left_data[self.left_data['player_num'] == unum1]['player_x']
+        player1_y = self.left_data[self.left_data['player_num'] == unum1]['player_y']
+        ax.plot(player1_x, player1_y, color="r", linewidth=0.5, label='{}_{}'.format(self.left_team, str(unum1)))
+        player2_x = self.right_data[self.right_data['player_num'] == unum2]['player_x']
+        player2_y = self.right_data[self.right_data['player_num'] == unum2]['player_y']
+        ax.plot(player2_x, player2_y, color="b", linewidth=0.5, label='{}_{}'.format(self.right_team, str(unum2)))
+        plt.title('{} Player {} And {} Player {} Trace'.format(self.left_team,str(unum1), self.right_team, str(unum2)))
+        ax.legend(loc='upper left')
 
     def ShowKickLine(self):
         ax = self.init()
@@ -127,10 +138,10 @@ class SoccerAnalysis:
         
     def ShowLeftHeatMap(self,unum=0):
         ax = self.init()
-        right_player_x = self.right_data[self.right_data['player_num'] == unum]['player_x']
-        right_player_y = self.right_data[self.right_data['player_num'] == unum]['player_y']
+        left_player_x = self.left_data[self.left_data['player_num'] == unum]['player_x']
+        left_player_y = self.left_data[self.left_data['player_num'] == unum]['player_y']
         extent = [-56.5, 56.5, -38, 38]
-        ax.hexbin(right_player_x, right_player_y, gridsize=30, cmap='Reds',extent=extent, mincnt=1)
+        ax.hexbin(left_player_x, left_player_y, gridsize=30, cmap='Reds',extent=extent, mincnt=1)
         ax.set_xlabel('Player X Position')
         ax.set_ylabel('Player Y Position')
         plt.title('{}_{} Player Heatmap'.format(self.left_team, str(unum)))
