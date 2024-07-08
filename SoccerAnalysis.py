@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+
 class SoccerAnalysis:
     def __init__(self, data):
         self.data = data
@@ -124,31 +125,29 @@ class SoccerAnalysis:
         plt.suptitle('{}_{} vs {}_{} Stamina Pie'.format(self.left_team, str(unum1), self.right_team, str(unum2)))
         plt.tight_layout()
         
-    def ShowLeftHeatMap(self):
+    def ShowLeftHeatMap(self,unum=0):
         ax = self.init()
-        left_player_x = self.left_data['player_x']
-        left_player_y = self.left_data['player_y']
-
-        ax.hexbin(left_player_x, left_player_y, gridsize=30, cmap='Reds')
-        ax.set_title('{} Player Heatmap'.format(self.left_team))
+        right_player_x = self.right_data[self.right_data['player_num'] == unum]['player_x']
+        right_player_y = self.right_data[self.right_data['player_num'] == unum]['player_y']
+        extent = [-56.5, 56.5, -38, 38]
+        ax.hexbin(right_player_x, right_player_y, gridsize=30, cmap='Reds',extent=extent, mincnt=1)
         ax.set_xlabel('Player X Position')
         ax.set_ylabel('Player Y Position')
-        plt.title('{} Player Heatmap'.format(self.left_team))
+        plt.title('{}_{} Player Heatmap'.format(self.left_team, str(unum)))
         
         # 添加颜色条
         cb = plt.colorbar(ax.collections[0], ax=ax)
         cb.set_label('Count')
 
-    def ShowRightHeatMap(self):
+    def ShowRightHeatMap(self,unum=0):
         ax = self.init()
-        right_player_x = self.right_data['player_x']
-        right_player_y = self.right_data['player_y']
-
-        ax.hexbin(right_player_x, right_player_y, gridsize=30, cmap='Reds')
-        ax.set_title('{} Player Heatmap'.format(self.right_team))
+        right_player_x = self.right_data[self.right_data['player_num'] == unum]['player_x']
+        right_player_y = self.right_data[self.right_data['player_num'] == unum]['player_y']
+        extent = [-56.5, 56.5, -38, 38]
+        ax.hexbin(right_player_x, right_player_y, gridsize=30, cmap='Reds',extent=extent, mincnt=1)
         ax.set_xlabel('Player X Position')
         ax.set_ylabel('Player Y Position')
-        plt.title('{} Player Heatmap'.format(self.right_team))
+        plt.title('{}_{} Player Heatmap'.format(self.right_team, str(unum)))
         
         cb = plt.colorbar(ax.collections[0], ax=ax)
         cb.set_label('Count')

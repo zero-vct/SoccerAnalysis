@@ -130,12 +130,14 @@ class SoccerAnalysisApp:
     
     def show_left_player_heatmap(self):
         plt.close("all")
-        self.visualizer.ShowLeftHeatMap()
+        unum = simpledialog.askinteger("输入", "请输入左方球员编号 (1-11):", minvalue=1, maxvalue=11)
+        self.visualizer.ShowLeftHeatMap(unum)
         self.display_plot()
         
     def show_right_player_heatmap(self):
         plt.close("all")
-        self.visualizer.ShowRightHeatMap()
+        unum = simpledialog.askinteger("输入", "请输入右方球员编号 (1-11):", minvalue=1, maxvalue=11)
+        self.visualizer.ShowRightHeatMap(unum)
         self.display_plot()
         
     def show_ball_heatmap(self):
